@@ -1,0 +1,8 @@
+# Cloudflaredを使う場合はSSLを使わない。
+:80 {
+    reverse_proxy mi:3000 {
+        transport http {
+            versions h2c 1.1
+        }
+    }
+}

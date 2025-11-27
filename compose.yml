@@ -10,15 +10,19 @@ services:
     networks:
       - internal_network
 
+# Cloudflare DNSのProxy(Tunnelではない)を使う場合は、厳格(フル)SSLモードにすること。
+# フレキシブルだと308リダイレクトループになる。
   web:
     image: caddy:2
     profiles:
       - proxy
     #environment:
+    ## 検証用。本番環境のLet's Encryptを実行すると526エラーで1時間待たされることがあるため。
     #  ACME_CA: "https://acme-staging-v02.api.letsencrypt.org/directory"
     #ports:
     #  - "80:80"
     #  - "443:443"
+    #  - "443:443:udp" # QUIC/HTTP3用
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
@@ -41,6 +45,8 @@ services:
 
   db:
     image: groonga/pgroonga:4.0.4-alpine-18
+    #共有メモリ不足でVacuumの失敗を防止する。チューニングと合わせて変更すること。
+    #shm_size >= shared_buffers。shared_buffers ≈ 総メモリの25%。
     shm_size: "1g"
     env_file:
       - .env

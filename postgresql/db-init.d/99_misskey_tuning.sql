@@ -1,5 +1,5 @@
 /* 99_misskey_tuning.sql
-   2vCPU 2GB RAM SSD PostgreSQL tuning settings for Misskey
+   1GB RAM SSD PostgreSQL tuning settings for Misskey
  */
 ALTER SYSTEM SET max_connections = '50';
 ALTER SYSTEM SET shared_buffers = '256MB';
@@ -18,7 +18,7 @@ ALTER SYSTEM SET autovacuum_vacuum_cost_limit = '2000';
 SELECT pg_reload_conf();
 
 /* 99_misskey_tuning.sql
-   2vCPU 2GB RAM SSD PostgreSQL tuning settings for Misskey
+   2GB RAM SSD PostgreSQL tuning settings for Misskey
  */
 /*
 ALTER SYSTEM SET max_connections = '100';

@@ -51,7 +51,7 @@ services:
     env_file:
       - .env
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql
       - ./postgresql/db-init.d:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"

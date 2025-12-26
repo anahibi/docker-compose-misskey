@@ -32,7 +32,12 @@ services:
       - internal_network
 
   mi:
-    image: misskey/misskey:latest
+    image: misskey/misskey:2025.12.2
+    mem_limit: 1g
+    memswap_limit: 1g
+    cpus: "1.5"
+    environment:
+      NODE_OPTIONS: "--max-old-space-size=768"
     depends_on:
       - db
       - redis
@@ -44,10 +49,13 @@ services:
       - internal_network
 
   db:
-    image: groonga/pgroonga:4.0.4-alpine-18
+    image: groonga/pgroonga:4.0.5-alpine-18
     #共有メモリ不足でVacuumの失敗を防止する。チューニングと合わせて変更すること。
     #shm_size >= shared_buffers。shared_buffers ≈ 総メモリの25%。
-    shm_size: "1g"
+    shm_size: "512m"
+    mem_limit: 1g
+    memswap_limit: 1g
+    cpus: "1"
     env_file:
       - .env
     volumes:

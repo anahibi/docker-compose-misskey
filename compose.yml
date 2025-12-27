@@ -14,6 +14,7 @@ services:
 # フレキシブルだと308リダイレクトループになる。
   web:
     image: caddy:2
+    mem_limit: "256m"
     profiles:
       - proxy
     #environment:
@@ -22,7 +23,7 @@ services:
     #ports:
     #  - "80:80"
     #  - "443:443"
-    #  - "443:443:udp" # QUIC/HTTP3用
+    #  - "443:443/udp" # QUIC/HTTP3用
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
@@ -72,6 +73,7 @@ services:
   redis:
     restart: unless-stopped
     image: redis:8-alpine
+    mem_limit: "256m"
     command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}",]
     volumes:
       - redis-data:/data

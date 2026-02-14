@@ -21,7 +21,8 @@ services:
   mi:
     image: misskey/misskey:2025.12.2
     environment:
-      NODE_OPTIONS: "--max-old-space-size=768"
+      TZ: Asia/Tokyo
+      #NODE_OPTIONS: "--max-old-space-size=768"
     depends_on:
       - db
       - redis
@@ -35,7 +36,7 @@ services:
   db:
     image: groonga/pgroonga:4.0.5-alpine-18
     #共有メモリ不足でVacuumの失敗を防止する。チューニングと合わせて変更すること。
-    shm_size: "512m"
+    shm_size: "1g"
     env_file:
       - .env
     volumes:

@@ -2,6 +2,10 @@ example.com {
     encode gzip
     header /assets Cache-Control "public, max-age=31536000, immutable"
 
+#    log {
+#        output stdout
+#    }
+
     reverse_proxy mi:3000 {
         header_up X-Real-IP {header.CF-Connecting-IP}
         header_up X-Forwarded-For {header.CF-Connecting-IP}

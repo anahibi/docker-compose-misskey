@@ -1,46 +1,24 @@
 /* 99_misskey_tuning.sql
-   1GB RAM SSD PostgreSQL tuning settings for Misskey
- */
-ALTER SYSTEM SET max_connections = '50';
-ALTER SYSTEM SET shared_buffers = '256MB';
-ALTER SYSTEM SET effective_cache_size = '768MB';
-ALTER SYSTEM SET maintenance_work_mem = '128MB';
-ALTER SYSTEM SET wal_buffers = '8MB';
-ALTER SYSTEM SET random_page_cost = '1.1';
-ALTER SYSTEM SET effective_io_concurrency = '100';
-ALTER SYSTEM SET work_mem = '4MB';
-ALTER SYSTEM SET huge_pages = 'off';
-ALTER SYSTEM SET max_wal_size = '1GB';
-ALTER SYSTEM SET min_wal_size = '256MB';
-ALTER SYSTEM SET autovacuum_vacuum_scale_factor = '0.05';
-ALTER SYSTEM SET autovacuum_analyze_scale_factor = '0.05';
-ALTER SYSTEM SET autovacuum_vacuum_cost_limit = '2000';
-SELECT pg_reload_conf();
-
-/* 99_misskey_tuning.sql
    2GB RAM SSD PostgreSQL tuning settings for Misskey
  */
-/*
 ALTER SYSTEM SET max_connections = '100';
 ALTER SYSTEM SET shared_buffers = '512MB';
 ALTER SYSTEM SET effective_cache_size = '1536MB';
-ALTER SYSTEM SET maintenance_work_mem = '256MB';
+ALTER SYSTEM SET maintenance_work_mem = '128MB';
+ALTER SYSTEM SET checkpoint_completion_target = '0.9';
 ALTER SYSTEM SET wal_buffers = '16MB';
+ALTER SYSTEM SET default_statistics_target = '100';
 ALTER SYSTEM SET random_page_cost = '1.1';
-ALTER SYSTEM SET effective_io_concurrency = '200';
-ALTER SYSTEM SET work_mem = '8MB';
+ALTER SYSTEM SET effective_io_concurrency = '100';
+ALTER SYSTEM SET work_mem = '4854kB';
 ALTER SYSTEM SET huge_pages = 'off';
-ALTER SYSTEM SET max_wal_size = '2GB';
-ALTER SYSTEM SET min_wal_size = '512MB';
-ALTER SYSTEM SET autovacuum_vacuum_scale_factor = '0.05';
-ALTER SYSTEM SET autovacuum_analyze_scale_factor = '0.05';
-ALTER SYSTEM SET autovacuum_vacuum_cost_limit = '2000';
+ALTER SYSTEM SET min_wal_size = '1GB';
+ALTER SYSTEM SET max_wal_size = '4GB';
+ALTER SYSTEM SET checkpoint_timeout = '15min';
 SELECT pg_reload_conf();
-*/
 
 /* Check config settings */
-/*
-SELECT name, setting
+SELECT name, unit, setting
 FROM pg_settings
 WHERE name IN (
     'shared_buffers',
@@ -63,4 +41,3 @@ WHERE name IN (
     'default_statistics_target'
 )
 ORDER BY name;
-*/

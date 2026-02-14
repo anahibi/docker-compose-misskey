@@ -1,29 +1,15 @@
 services:
-  tunnel:
-    restart: always
-    image: cloudflare/cloudflared
-    command: tunnel --no-autoupdate run
-    profiles:
-      - cf
-    env_file:
-      - .env
-    networks:
-      - internal_network
-
-# Cloudflare DNSのProxy(Tunnelではない)を使う場合は、厳格(フル)SSLモードにすること。
-# フレキシブルだと308リダイレクトループになる。
   web:
     image: caddy:2
-    mem_limit: "256m"
     profiles:
       - proxy
     #environment:
-    ## 検証用。本番環境のLet's Encryptを実行すると526エラーで1時間待たされることがあるため。
+    # 検証用。本番環境のLet's Encryptを実行すると526エラーで1時間待たされることがあるため。
     #  ACME_CA: "https://acme-staging-v02.api.letsencrypt.org/directory"
-    #ports:
-    #  - "80:80"
-    #  - "443:443"
-    #  - "443:443/udp" # QUIC/HTTP3用
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp" # QUIC/HTTP3用
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
@@ -34,9 +20,6 @@ services:
 
   mi:
     image: misskey/misskey:2025.12.2
-    mem_limit: 1g
-    memswap_limit: 1g
-    cpus: "1.5"
     environment:
       NODE_OPTIONS: "--max-old-space-size=768"
     depends_on:
@@ -44,7 +27,7 @@ services:
       - redis
     volumes:
       - ./misskey/config.yml:/misskey/.config/default.yml:ro
-      - misskey-files:/misskey/files
+      - ./files:/misskey/files
     restart: unless-stopped
     networks:
       - internal_network
@@ -52,11 +35,7 @@ services:
   db:
     image: groonga/pgroonga:4.0.5-alpine-18
     #共有メモリ不足でVacuumの失敗を防止する。チューニングと合わせて変更すること。
-    #shm_size >= shared_buffers。shared_buffers ≈ 総メモリの25%。
     shm_size: "512m"
-    mem_limit: 1g
-    memswap_limit: 1g
-    cpus: "1"
     env_file:
       - .env
     volumes:
@@ -73,7 +52,6 @@ services:
   redis:
     restart: unless-stopped
     image: redis:8-alpine
-    mem_limit: "256m"
     command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}",]
     volumes:
       - redis-data:/data
@@ -87,7 +65,6 @@ services:
 volumes:
   postgres-data:
   redis-data:
-  misskey-files:
   caddy-data:
   caddy-config:
 

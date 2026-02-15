@@ -1,4 +1,4 @@
-ALTER SYSTEM SET max_connections = '20';
+ALTER SYSTEM SET max_connections = '100';
 ALTER SYSTEM SET shared_buffers = '1024MB';
 ALTER SYSTEM SET effective_cache_size = '1536MB';
 ALTER SYSTEM SET maintenance_work_mem = '128MB';
